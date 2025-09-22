@@ -1,4 +1,4 @@
-@import "@tailwindcss/postcss";
+@import "tailwindcss";
 
 :root { 
   --theme-primary: #06b6d4; 
