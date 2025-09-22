@@ -13,6 +13,7 @@ import PlannerView from './views/PlannerView'
 import FlashcardsView from './views/FlashcardsView'
 import AnalyticsView from './views/AnalyticsView'
 import SkillsView from './views/SkillsView'
+import { INITIAL_SKILLS, MODULE_SKILL_MAPPING } from './skillsData';
 
 export type CelebrationType = 'module' | 'certification' | 'day' | 'theme' | 'achievement' | '';
 
@@ -40,14 +41,49 @@ export default function App(){
   const [achievements, setAchievements] = useState<string[]>(()=> safeGet(`${NS}:achs`, []))
   useEffect(()=> safeSet(`${NS}:achs`, achievements), [achievements])
 
-  const [skills, setSkills] = useState([
-    { id:'platform', label:'Platform', score:3.4 },
-    { id:'deliverability', label:'Deliverability', score:2.9 },
-    { id:'lifecycle', label:'Lifecycle/CRM', score:3.2 },
-    { id:'analytics', label:'Data & Analytics', score:2.5 },
-    { id:'copy', label:'Copywriting', score:3.7 },
-  ])
-  const bumpSkill = (id:string, delta=0.3)=> setSkills(prev=> prev.map(s=> s.id===id? { ...s, score: Math.min(5, s.score + delta)}: s))
+// Enhanced Skills System
+const calculateSkillProgression = (baseSkills: any[], progress: Record<string, boolean>) => {
+  const updatedSkills = baseSkills.map(skill => ({ ...skill }));
+  
+  // Apply skill gains for completed modules
+  Object.keys(progress).forEach(moduleKey => {
+    if (progress[moduleKey]) {
+      const skillGains = MODULE_SKILL_MAPPING[moduleKey];
+      if (skillGains) {
+        Object.entries(skillGains).forEach(([skillId, gain]) => {
+          const skillIndex = updatedSkills.findIndex(s => s.id === skillId);
+          if (skillIndex !== -1) {
+            updatedSkills[skillIndex] = {
+              ...updatedSkills[skillIndex],
+              score: Math.min(5.0, updatedSkills[skillIndex].score + (gain as number))
+            };
+          }
+        });
+      }
+    }
+  });
+  
+  return updatedSkills;
+};
+
+// Replace your skills state initialization:
+const [skills, setSkills] = useState(() => {
+  const savedProgress = safeGet(`${NS}:progress`, {});
+  return calculateSkillProgression(INITIAL_SKILLS, savedProgress);
+});
+
+// Update skills whenever progress changes (add this useEffect):
+useEffect(() => {
+  const updatedSkills = calculateSkillProgression(INITIAL_SKILLS, progress);
+  setSkills(updatedSkills);
+}, [progress]);
+
+// Enhanced bumpSkill function (keep for manual skill adjustments if needed):
+const bumpSkill = (id: string, delta = 0.3) => {
+  setSkills(prev => prev.map(s => 
+    s.id === id ? { ...s, score: Math.min(5, s.score + delta) } : s
+  ));
+};
 
   // Study timer and activities (keeping existing logic)
   const [tasks, setTasks] = useState(()=> safeGet(`${NS}:tasks`, [
@@ -98,20 +134,195 @@ export default function App(){
     triggerCelebration('theme')
   }
 
-  // Existing bootcamp data and other state...
+// Enhanced bootcamp data with comprehensive, realistic content
   const bootcampData: Record<number, any> = {
-    1: { title:'Technical Foundation + HubSpot Certification', timeEstimate:'9-10 hours', modules:[
-      { id:'1a', title:'HubSpot Email Marketing Certification', time:'4 hours', type:'certification', skill:'platform' },
-      { id:'1b', title:'Advanced Deliverability Mastery', time:'2.5 hours', type:'technical', skill:'deliverability' },
-      { id:'1c', title:'Platform Mastery Strategy', time:'2.5 hours', type:'practical', skill:'platform' },
-    ]},
-    2: { title:'Strategic Automation + Specialization', timeEstimate:'10-12 hours', modules:[
-      { id:'2a', title:'Advanced Lifecycle Marketing Framework', time:'3 hours', type:'strategic', skill:'automation' },
-      { id:'2b', title:'Behavioral Segmentation Excellence', time:'2.5 hours', type:'analytical', skill:'segmentation' },
-    ]},
-    3: { title:'Advanced Analytics + Career Portfolio', timeEstimate:'7-9 hours', modules:[
-      { id:'3a', title:'Performance Analytics & ROI Attribution', time:'3 hours', type:'analytical', skill:'analytics' },
-    ]}
+    1: { 
+      title:'Technical Foundation + HubSpot Certification', 
+      timeEstimate:'9-10 hours', 
+      modules:[
+        { 
+          id:'1a', 
+          title:'HubSpot Email Marketing Certification', 
+          time:'4 hours', 
+          type:'certification', 
+          skill:'platform',
+          objective: 'Master HubSpot\'s email marketing tools and best practices',
+          resources: [
+            { title: 'HubSpot Email Marketing Certification', url: 'https://academy.hubspot.com/courses/email-marketing', type: 'course' },
+            { title: 'Email Marketing Planning Template', url: 'https://offers.hubspot.com/email-marketing-planning-template', type: 'template' },
+            { title: 'Email Design Guide + Examples', url: 'https://blog.hubspot.com/marketing/email-design-guide', type: 'guide' },
+            { title: 'HubSpot Email Tool Documentation', url: 'https://knowledge.hubspot.com/email', type: 'documentation' },
+            { title: '50 Email Templates (Free)', url: 'https://offers.hubspot.com/email-templates', type: 'templates' }
+          ],
+          knowledgeCheck: {
+            question: 'What are the two most important email KPIs for measuring engagement?',
+            answer: 'Open rate (measures subject line effectiveness) and Click-through rate/CTR (measures content relevance and CTA effectiveness).'
+          },
+          activities: [
+            'Create HubSpot Academy account and enroll in Email Marketing Certification',
+            'Download and review the Email Marketing Planning Template',
+            'Complete modules 1-3 of the certification course',
+            'Take practice quiz and review any weak areas',
+            'Complete final certification exam (passing score required)',
+            'Download certificate and add to LinkedIn/professional portfolio'
+          ]
+        },
+        { 
+          id:'1b', 
+          title:'Advanced Deliverability Mastery', 
+          time:'2.5 hours', 
+          type:'technical', 
+          skill:'deliverability',
+          objective: 'Ensure your emails reach the inbox, not spam folders',
+          resources: [
+            { title: 'Google Postmaster Tools', url: 'https://www.gmail.com/postmaster/', type: 'tool' },
+            { title: 'Microsoft SNDS (Smart Network Data Services)', url: 'https://sendersupport.olc.protection.outlook.com/snds/', type: 'tool' },
+            { title: 'MXToolbox Email Deliverability Test', url: 'https://mxtoolbox.com/deliverability/', type: 'tool' },
+            { title: 'Deliverability Guide by Mailchimp', url: 'https://mailchimp.com/resources/email-deliverability-guide/', type: 'guide' },
+            { title: 'SPF, DKIM, DMARC Setup Guide', url: 'https://www.validity.com/blog/email-authentication/', type: 'tutorial' },
+            { title: 'Email Warming Strategy Template', url: 'https://docs.google.com/spreadsheets/d/1example', type: 'template' }
+          ],
+          knowledgeCheck: {
+            question: 'What is a seed list and why is it critical for deliverability monitoring?',
+            answer: 'A seed list is a collection of test email addresses across major ISPs (Gmail, Outlook, Yahoo, etc.) used to monitor where emails land (inbox, spam, promotions). It\'s critical because it provides real-time placement data before sending to your main list.'
+          },
+          activities: [
+            'Set up Google Postmaster Tools for your sending domain',
+            'Run deliverability audit using MXToolbox for current domain',
+            'Verify SPF, DKIM, and DMARC records are properly configured',
+            'Create seed list with 10+ addresses across major ISPs',
+            'Build 30-day email warming plan with gradual volume increases',
+            'Document baseline deliverability metrics and set monitoring schedule'
+          ]
+        },
+        { 
+          id:'1c', 
+          title:'Platform Mastery Strategy', 
+          time:'2.5 hours', 
+          type:'practical', 
+          skill:'platform',
+          objective: 'Navigate and optimize email marketing platforms like a pro',
+          resources: [
+            { title: 'Email Platform Comparison Matrix', url: 'https://www.campaignmonitor.com/blog/email-marketing/best-email-marketing-software/', type: 'comparison' },
+            { title: 'Customer Journey Mapping Template', url: 'https://miro.com/templates/customer-journey-map/', type: 'template' },
+            { title: 'Email Automation Workflow Builder', url: 'https://www.lucidchart.com/pages/examples/email-workflow-template', type: 'tool' },
+            { title: 'Platform Migration Checklist', url: 'https://blog.mailchimp.com/switching-email-providers/', type: 'checklist' },
+            { title: 'Advanced Segmentation Strategies', url: 'https://blog.hubspot.com/marketing/advanced-email-segmentation', type: 'guide' },
+            { title: 'Platform ROI Calculator', url: 'https://calculator.net/investment-calculator.html', type: 'calculator' }
+          ],
+          knowledgeCheck: {
+            question: 'What are the 5 key lifecycle stages in email marketing?',
+            answer: 'Acquire (lead generation) → Onboard (welcome series) → Activate (first value/purchase) → Retain (ongoing engagement) → Reactivate (win-back campaigns).'
+          },
+          activities: [
+            'Audit current email platform capabilities and gaps',
+            'Map customer lifecycle stages using Miro template',
+            'Define entry/exit criteria for each lifecycle stage',
+            'Identify 3 core KPIs for each stage (acquisition, engagement, revenue)',
+            'Create 90-day platform optimization roadmap',
+            'List top 5 A/B tests to run in next quarter'
+          ]
+        },
+      ]
+    },
+    2: { 
+      title:'Strategic Automation + Specialization', 
+      timeEstimate:'10-12 hours', 
+      modules:[
+        { 
+          id:'2a', 
+          title:'Advanced Lifecycle Marketing Framework', 
+          time:'3 hours', 
+          type:'strategic', 
+          skill:'lifecycle',
+          objective: 'Create nurture campaigns that guide customers through every stage',
+          resources: [
+            { title: 'Lifecycle Marketing Masterclass (HubSpot)', url: 'https://academy.hubspot.com/courses/lifecycle-marketing', type: 'course' },
+            { title: 'Automated Email Workflow Templates', url: 'https://blog.klaviyo.com/email-automation-templates', type: 'templates' },
+            { title: 'Customer Lifecycle Analytics Dashboard', url: 'https://www.klipfolio.com/resources/articles/what-is-a-customer-lifecycle-dashboard', type: 'tool' },
+            { title: 'Lifecycle Stage Definitions Guide', url: 'https://blog.hubspot.com/service/what-does-it-mean-to-be-lifecycle-stage-customer', type: 'guide' },
+            { title: 'Trigger-Based Email Strategy', url: 'https://www.campaignmonitor.com/blog/email-marketing/behavioral-triggered-emails/', type: 'strategy' },
+            { title: 'Lifecycle Metrics Tracking Template', url: 'https://docs.google.com/spreadsheets/d/lifecycle-example', type: 'template' }
+          ],
+          knowledgeCheck: {
+            question: 'What triggers should move a contact from "Lead" to "Marketing Qualified Lead" status?',
+            answer: 'Combination of engagement (email opens/clicks, content downloads) + demographic fit (company size, role) + behavioral triggers (pricing page visits, demo requests, multiple touchpoints within set timeframe).'
+          },
+          activities: [
+            'Map detailed customer journey from awareness to advocacy',
+            'Set up automated workflows for each lifecycle transition',
+            'Create behavioral trigger logic for stage progression',
+            'Build welcome series with 5-7 touchpoints over 2 weeks',
+            'Design win-back campaign for dormant subscribers',
+            'Implement lead scoring model with lifecycle criteria'
+          ]
+        },
+        { 
+          id:'2b', 
+          title:'Behavioral Segmentation Excellence', 
+          time:'2.5 hours', 
+          type:'analytical', 
+          skill:'analytics',
+          objective: 'Segment audiences based on behavior for maximum engagement',
+          resources: [
+            { title: 'Advanced Segmentation Strategies', url: 'https://blog.mailchimp.com/advanced-email-segmentation/', type: 'guide' },
+            { title: 'Customer Data Platform Guide', url: 'https://blog.hubspot.com/service/what-is-a-customer-data-platform', type: 'guide' },
+            { title: 'RFM Analysis Template (Excel)', url: 'https://www.kaggle.com/datasets/puneetbhaya/rfm-analysis', type: 'template' },
+            { title: 'Google Analytics 4 for Email', url: 'https://support.google.com/analytics/answer/9267735', type: 'tutorial' },
+            { title: 'Predictive Analytics for Email', url: 'https://blog.klaviyo.com/predictive-analytics-email-marketing', type: 'advanced' },
+            { title: 'Segment Performance Tracking', url: 'https://help.mailchimp.com/en/articles/360034378371', type: 'documentation' }
+          ],
+          knowledgeCheck: {
+            question: 'What are the three dimensions of RFM analysis and why are they powerful for email segmentation?',
+            answer: 'Recency (how recently they engaged), Frequency (how often they engage), Monetary (how much they spend). Powerful because it identifies your best customers, at-risk customers, and optimal messaging frequency for each segment.'
+          },
+          activities: [
+            'Perform RFM analysis on current subscriber base',
+            'Create behavioral segments based on engagement patterns',
+            'Set up dynamic segments that update automatically',
+            'Build targeted campaigns for each behavioral segment',
+            'A/B test messaging for high-value vs. at-risk segments',
+            'Implement predictive scoring for churn risk'
+          ]
+        },
+      ]
+    },
+    3: { 
+      title:'Advanced Analytics + Career Portfolio', 
+      timeEstimate:'7-9 hours', 
+      modules:[
+        { 
+          id:'3a', 
+          title:'Performance Analytics & ROI Attribution', 
+          time:'3 hours', 
+          type:'analytical', 
+          skill:'analytics',
+          objective: 'Track, measure, and prove the value of your email campaigns',
+          resources: [
+            { title: 'Google Analytics 4 Email Tracking Setup', url: 'https://support.google.com/analytics/answer/9267735', type: 'tutorial' },
+            { title: 'Email ROI Calculator Template', url: 'https://blog.hubspot.com/marketing/how-to-calculate-email-marketing-roi', type: 'calculator' },
+            { title: 'Marketing Attribution Models Guide', url: 'https://blog.google/products/ads/marketing-attribution-models/', type: 'guide' },
+            { title: 'Looker Studio Email Dashboard Template', url: 'https://datastudio.google.com/gallery', type: 'template' },
+            { title: 'UTM Parameter Best Practices', url: 'https://support.google.com/analytics/answer/1033867', type: 'guide' },
+            { title: 'Email Performance Benchmarks', url: 'https://www.campaignmonitor.com/resources/guides/email-marketing-benchmarks/', type: 'benchmarks' },
+            { title: 'Advanced Email Analytics (Klaviyo)', url: 'https://help.klaviyo.com/hc/en-us/articles/115005248128', type: 'documentation' }
+          ],
+          knowledgeCheck: {
+            question: 'How do you calculate true email marketing ROI and what attribution model should you use?',
+            answer: 'ROI = (Revenue - Cost) / Cost × 100. Use multi-touch attribution (not last-click) since email often plays an assist role. Track both direct conversions and influenced conversions within 7-30 day windows.'
+          },
+          activities: [
+            'Set up UTM tracking for all email campaigns',
+            'Create custom email dashboard in Google Analytics 4',
+            'Build comprehensive ROI tracking spreadsheet',
+            'Implement multi-touch attribution reporting',
+            'Set up automated performance alerts for key metrics',
+            'Create executive-level performance report template',
+            'Document case studies showing email marketing impact'
+          ]
+        },
+      ]
+    }
   }
 
   // Rest of existing state management...
@@ -164,24 +375,9 @@ export default function App(){
       <div 
         className={`theme-animate min-h-screen transition-all duration-500 ${themeTransitioning ? 'animate-pulse' : ''}`}
         style={{ 
-          background: theme.gradientBg,
-          backgroundSize: '400% 400%',
+          background: theme.staticBg, // Using static background instead of animated
         }}
       >
-        <style dangerouslySetInnerHTML={{__html: `
-          @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-          }
-          .theme-transition { transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
-          .theme-glow { animation: themeGlow 3s ease-in-out infinite; }
-          @keyframes themeGlow {
-            0%, 100% { filter: brightness(1) saturate(1); }
-            50% { filter: brightness(1.1) saturate(1.2); }
-          }
-        `}} />
-
         {/* Components */}
         <Celebration 
           showCelebration={showCelebration} 
@@ -197,107 +393,126 @@ export default function App(){
           currentTheme={theme}
         />
 
-        {/* Enhanced Header */}
-        <div className="header shadow-lg border-b backdrop-blur-sm" 
-             style={{ backgroundColor: `${theme.cardGradient}90`, borderColor: theme.primary }}>
-          <div className="container flex items-center justify-between" id="header-root">
-            <div>
-              <h1 className="text-2xl font-bold inline-flex items-center gap-2">
-                <BarChart3 style={{ color: theme.accent }} className="w-6 h-6" />
-                Morgan LMS — Phase 1
-              </h1>
-              <div className="text-sm" style={{ color: theme.gray }}>
-                Custom themes, micro-animations, and playful 3D — plus your core LMS
+        {/* Enhanced Header with Better Layout and Contrast */}
+        <div className="shadow-lg border-b backdrop-blur-sm" 
+             style={{ 
+               backgroundColor: theme.headerBg,
+               borderColor: theme.primary,
+               padding: '24px 0'
+             }}>
+          <div className="container" id="header-root">
+            {/* Top Row: Title and Theme/Export Actions */}
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h1 className="text-3xl font-bold inline-flex items-center gap-3" 
+                    style={{ color: theme.headerText }}>
+                  <BarChart3 style={{ color: theme.accent }} className="w-8 h-8" />
+                  Morgan LMS — Phase 1
+                </h1>
+                <div className="text-sm mt-1" style={{ color: theme.headerSubtext }}>
+                  Custom themes, micro-animations, and playful 3D — plus your core LMS
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-3">
+                <button type="button" onClick={exportAllData} 
+                        className="p-3 rounded-lg border inline-flex items-center gap-2 btn-hover transition-all duration-300" 
+                        style={{
+                          background: theme.buttonBg,
+                          borderColor: theme.buttonBorder,
+                          color: theme.buttonText
+                        }}>
+                  <FileDown className="w-4 h-4"/> Export
+                </button>
+
+                <button type="button" onClick={()=> openNotes(`day-${currentDay}`, `Day ${currentDay}`)} 
+                        className="p-3 rounded-lg border inline-flex items-center gap-2 btn-hover transition-all duration-300" 
+                        style={{
+                          background: theme.buttonBg,
+                          borderColor: theme.buttonBorder,
+                          color: theme.buttonText
+                        }}>
+                  <StickyNote className="w-4 h-4"/> Notes
+                </button>
+
+                {/* Enhanced Theme Button */}
+                <button 
+                  type="button" 
+                  onClick={()=> setShowThemeGallery(true)} 
+                  className="p-3 rounded-lg inline-flex items-center gap-2 btn-hover transition-all duration-300 hover:scale-105"
+                  style={{ 
+                    background: theme.accentGradient, 
+                    color: 'white',
+                    boxShadow: theme.glowEffect,
+                    border: 'none'
+                  }}
+                >
+                  <Palette className="w-4 h-4"/> Theme
+                </button>
               </div>
             </div>
-            
-            <div className="flex items-center gap-3">
-              {/* Enhanced Daily Goal */}
-              <div className="text-center">
-                <div className="text-sm" style={{ color: theme.gray }}>Daily Goal</div>
-                <select
-                  value={dailyGoal}
-                  onChange={(e)=> setDailyGoal(parseInt(e.target.value))}
-                  className="p-2 rounded border transition-all duration-300"
-                  style={card}
-                  aria-label="Set daily module goal"
-                >
-                  <option value={1}>1 module</option>
-                  <option value={2}>2 modules</option>
-                  <option value={3}>3 modules</option>
-                  <option value={4}>4 modules</option>
-                </select>
+
+            {/* Bottom Row: Stats and Controls */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-6">
+                {/* Daily Goal */}
+                <StatChip
+                  label="Daily Goal"
+                  value={<><Target className="w-4 h-4" style={{color: theme.primary}}/> {dailyGoal} modules</>}
+                  color={theme.primary}
+                />
+
+                {/* Study Streak */}
+                <StatChip 
+                  label="Study Streak" 
+                  value={<><Flame className="w-4 h-4" style={{color: theme.warning}}/> {studyStreak}</>} 
+                  color={theme.warning} 
+                />
+
+                {/* Overall Progress */}
+                <StatChip 
+                  label="Overall Progress" 
+                  value={`${overallProgress}%`} 
+                  color={theme.primary} 
+                />
               </div>
-
-              {/* Enhanced Study Streak */}
-              <StatChip 
-                label="Study Streak" 
-                value={<><Flame className="w-4 h-4" style={{color: theme.warning}}/> {studyStreak}</>} 
-                color={theme.warning} 
-              />
-
-              {/* Action Buttons */}
-              <button type="button" onClick={exportAllData} 
-                      className="p-2 rounded-lg border inline-flex items-center gap-2 btn-hover transition-all duration-300" 
-                      style={card}>
-                <FileDown className="w-4 h-4"/> Export
-              </button>
-
-              <button type="button" onClick={()=> openNotes(`day-${currentDay}`, `Day ${currentDay}`)} 
-                      className="p-2 rounded-lg border inline-flex items-center gap-2 btn-hover transition-all duration-300" 
-                      style={card}>
-                <StickyNote className="w-4 h-4"/> Notes
-              </button>
-
-              {/* Enhanced Theme Button */}
-              <button 
-                type="button" 
-                onClick={()=> setShowThemeGallery(true)} 
-                className="p-2 rounded-lg inline-flex items-center gap-2 btn-hover transition-all duration-300 hover:scale-105"
-                style={{ 
-                  background: theme.accentGradient, 
-                  color: 'white',
-                  boxShadow: theme.glowEffect,
-                  border: 'none'
-                }}
-              >
-                <Palette className="w-4 h-4"/> Theme
-              </button>
               
-              {/* Enhanced Timer */}
-              <div className="flex items-center gap-2">
+              {/* Timer Controls */}
+              <div className="flex items-center gap-4">
                 <div className="text-right">
-                  <div className="text-xs" style={{ color: theme.gray }}>Study Time</div>
-                  <div className="text-lg font-mono font-bold" style={{color: theme.primary}}>
+                  <div className="text-xs mb-1" style={{ color: theme.headerSubtext }}>Study Time</div>
+                  <div className="text-xl font-mono font-bold" style={{color: theme.primary}}>
                     {formatTime(studyTimer.time)}
                   </div>
                 </div>
-                <button
-                  onClick={()=> setStudyTimer(prev => ({...prev, isRunning: !prev.isRunning}))}
-                  className="p-2 rounded-lg text-white transition-all duration-300 hover:scale-110 shadow-lg"
-                  style={{backgroundColor: studyTimer.isRunning ? theme.warning : theme.success}}
-                  title={studyTimer.isRunning ? "Pause study timer" : "Start study timer"}
-                  aria-label={studyTimer.isRunning ? "Pause study timer" : "Start study timer"}
-                >
-                  {studyTimer.isRunning ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
-                </button>
-                <button
-                  onClick={()=> setStudyTimer({ isRunning: false, time: 0 })}
-                  className="p-2 rounded-lg text-white transition-all duration-300 hover:scale-110 shadow-lg"
-                  style={{ backgroundColor: theme.gray }}
-                  title="Reset study timer"
-                  aria-label="Reset study timer"
-                >
-                  <RotateCcw className="w-5 h-5" />
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={()=> setStudyTimer(prev => ({...prev, isRunning: !prev.isRunning}))}
+                    className="p-3 rounded-lg text-white transition-all duration-300 hover:scale-110 shadow-lg"
+                    style={{backgroundColor: studyTimer.isRunning ? theme.warning : theme.success}}
+                    title={studyTimer.isRunning ? "Pause study timer" : "Start study timer"}
+                    aria-label={studyTimer.isRunning ? "Pause study timer" : "Start study timer"}
+                  >
+                    {studyTimer.isRunning ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
+                  </button>
+                  <button
+                    onClick={()=> setStudyTimer({ isRunning: false, time: 0 })}
+                    className="p-3 rounded-lg text-white transition-all duration-300 hover:scale-110 shadow-lg"
+                    style={{ backgroundColor: theme.gray }}
+                    title="Reset study timer"
+                    aria-label="Reset study timer"
+                  >
+                    <RotateCcw className="w-5 h-5" />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
         {/* Tabs */}
-        <div className="container" style={{ paddingTop: 16 }}>
-          <div className="flex gap-3" style={{ flexWrap:'wrap', marginBottom: 16 }}>
+        <div className="container" style={{ paddingTop: 24 }}>
+          <div className="flex gap-3" style={{ flexWrap:'wrap', marginBottom: 24 }}>
             {([['bootcamp','Bootcamp', <BookOpen key="i" className="w-4 h-4"/>, `${overallProgress}%`],
                ['planner','Planner', <ClipboardList key="i" className="w-4 h-4"/>, tasks.filter(t=>t.status==='doing').length],
                ['flashcards','Flashcards', <Brain key="i" className="w-4 h-4"/>, null],
@@ -307,20 +522,20 @@ export default function App(){
                 <button key={id}
                   type="button"
                   onClick={()=> setActiveTab(id)}
-                  className={`p-2 rounded-lg border btn-hover transition-all duration-300 hover:scale-105 ${
+                  className={`p-3 rounded-lg border btn-hover transition-all duration-300 hover:scale-105 ${
                     activeTab===id ? 'shadow-lg scale-105' : 'hover:shadow-md'
                   }`}
                   style={{
-                    background: activeTab === id ? theme.accentGradient : card.background,
-                    borderColor: activeTab === id ? theme.primary : BORDER,
-                    color: activeTab === id ? 'white' : INK
+                    background: activeTab === id ? theme.accentGradient : theme.buttonBg,
+                    borderColor: activeTab === id ? theme.primary : theme.buttonBorder,
+                    color: activeTab === id ? 'white' : theme.buttonText
                   }}
                 >
                   <span className="inline-flex items-center gap-2">
                     {icon}
                     <span className="font-medium">{label}</span>
                     {badge && (
-                      <span className="text-xs px-2 py-1 rounded-full bg-white bg-opacity-20">
+                      <span className="text-xs px-2 py-1 rounded-full bg-gray bg-opacity-20">
                         {badge}
                       </span>
                     )}
@@ -331,9 +546,9 @@ export default function App(){
 
           {/* Tab Content */}
           <div 
-            className="rounded-xl shadow-lg p-6 transition-all duration-500"
+            className="rounded-xl shadow-lg p-8 transition-all duration-500"
             style={{ 
-              background: theme.cardGradient || 'rgba(255,255,255,0.95)',
+              background: theme.contentBg,
               boxShadow: theme.glowEffect || '0 10px 25px rgba(0,0,0,0.1)'
             }}
           >
