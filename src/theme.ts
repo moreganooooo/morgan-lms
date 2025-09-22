@@ -1,27 +1,89 @@
 export type Theme = {
-  name:string; primary:string; success:string; accent:string; warning:string; gray:string;
-  gradientBg:string; accentGradient:string
-}
+  name: string;
+  primary: string;
+  success: string;
+  accent: string;
+  warning: string;
+  gray: string;
+  gradientBg: string;
+  accentGradient: string;
+  // Enhanced theme properties for better visual effects
+  cardGradient: string;
+  glowEffect: string;
+  particleColor: string;
+};
 
 export const PRESETS: Record<string, Theme> = {
-  ocean:  { name:'Ocean Depths', primary:'#06b6d4', success:'#10b981', accent:'#8b5cf6', warning:'#f59e0b', gray:'#64748b',
-            gradientBg:'linear-gradient(135deg,#10b981 0%,#22d3ee 50%,#a78bfa 100%)',
-            accentGradient:'linear-gradient(135deg,#22d3ee 0%,#10b981 50%,#a78bfa 100%)' },
-  sunset: { name:'Sunset Blaze', primary:'#f97316', success:'#84cc16', accent:'#ec4899', warning:'#eab308', gray:'#78716c',
-            gradientBg:'linear-gradient(135deg,#22c55e 0%,#34d399 25%,#f59e0b 60%,#f97316 80%,#ec4899 100%)',
-            accentGradient:'linear-gradient(135deg,#f97316 0%,#ea580c 50%,#ec4899 100%)' },
-  forest: { name:'Forest Mystique', primary:'#059669', success:'#84cc16', accent:'#10b981', warning:'#f59e0b', gray:'#6b7280',
-            gradientBg:'linear-gradient(135deg,#86efac 0%,#34d399 50%,#10b981 100%)',
-            accentGradient:'linear-gradient(135deg,#10b981 0%,#34d399 50%,#86efac 100%)' },
-  cosmic: { name:'Cosmic Purple', primary:'#8b5cf6', success:'#22c55e', accent:'#a78bfa', warning:'#fbbf24', gray:'#6b7280',
-            gradientBg:'linear-gradient(135deg,#a78bfa 0%,#8b5cf6 50%,#22d3ee 100%)',
-            accentGradient:'linear-gradient(135deg,#8b5cf6 0%,#a78bfa 50%,#22d3ee 100%)' },
-  cyber:  { name:'Cyberpunk Neon', primary:'#06b6d4', success:'#00f5ff', accent:'#ff0080', warning:'#ffff00', gray:'#71717a',
-            gradientBg:'linear-gradient(135deg,#22d3ee 0%,#00f5ff 50%,#ff0080 100%)',
-            accentGradient:'linear-gradient(135deg,#06b6d4 0%,#00f5ff 50%,#ff0080 100%)' }
-}
+  ocean: {
+    name: 'Ocean Depths',
+    primary: '#06b6d4',
+    success: '#10b981',
+    accent: '#8b5cf6',
+    warning: '#f59e0b',
+    gray: '#64748b',
+    gradientBg: 'linear-gradient(135deg, #0f172a 0%, #1e293b 25%, #06b6d4 50%, #0891b2 75%, #155e75 100%)',
+    accentGradient: 'linear-gradient(135deg, #06b6d4 0%, #10b981 50%, #8b5cf6 100%)',
+    cardGradient: 'linear-gradient(135deg, rgba(15,23,42,0.9) 0%, rgba(30,41,59,0.9) 100%)',
+    glowEffect: '0 0 20px rgba(6,182,212,0.3)',
+    particleColor: '#06b6d4'
+  },
+  sunset: {
+    name: 'Sunset Blaze',
+    primary: '#f97316',
+    success: '#84cc16',
+    accent: '#ec4899',
+    warning: '#eab308',
+    gray: '#78716c',
+    gradientBg: 'linear-gradient(135deg, #451a03 0%, #7c2d12 25%, #ea580c 50%, #f97316 75%, #ec4899 100%)',
+    accentGradient: 'linear-gradient(135deg, #f97316 0%, #ea580c 50%, #ec4899 100%)',
+    cardGradient: 'linear-gradient(135deg, rgba(69,26,3,0.9) 0%, rgba(124,45,18,0.9) 100%)',
+    glowEffect: '0 0 20px rgba(249,115,22,0.3)',
+    particleColor: '#f97316'
+  },
+  forest: {
+    name: 'Forest Mystique',
+    primary: '#059669',
+    success: '#84cc16',
+    accent: '#10b981',
+    warning: '#f59e0b',
+    gray: '#6b7280',
+    gradientBg: 'linear-gradient(135deg, #064e3b 0%, #065f46 25%, #047857 50%, #059669 75%, #10b981 100%)',
+    accentGradient: 'linear-gradient(135deg, #059669 0%, #047857 50%, #10b981 100%)',
+    cardGradient: 'linear-gradient(135deg, rgba(6,78,59,0.9) 0%, rgba(6,95,70,0.9) 100%)',
+    glowEffect: '0 0 20px rgba(5,150,105,0.3)',
+    particleColor: '#059669'
+  },
+  cosmic: {
+    name: 'Cosmic Purple',
+    primary: '#8b5cf6',
+    success: '#a855f7',
+    accent: '#d946ef',
+    warning: '#f59e0b',
+    gray: '#6b7280',
+    gradientBg: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 25%, #6366f1 50%, #8b5cf6 75%, #d946ef 100%)',
+    accentGradient: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #d946ef 100%)',
+    cardGradient: 'linear-gradient(135deg, rgba(30,27,75,0.9) 0%, rgba(49,46,129,0.9) 100%)',
+    glowEffect: '0 0 20px rgba(139,92,246,0.3)',
+    particleColor: '#8b5cf6'
+  },
+  cyber: {
+    name: 'Cyberpunk Neon',
+    primary: '#06b6d4',
+    success: '#00f5ff',
+    accent: '#ff0080',
+    warning: '#ffff00',
+    gray: '#71717a',
+    gradientBg: 'linear-gradient(135deg, #0c0a09 0%, #18181b 25%, #06b6d4 50%, #00f5ff 75%, #ff0080 100%)',
+    accentGradient: 'linear-gradient(135deg, #06b6d4 0%, #00f5ff 50%, #ff0080 100%)',
+    cardGradient: 'linear-gradient(135deg, rgba(12,10,9,0.95) 0%, rgba(24,24,27,0.95) 100%)',
+    glowEffect: '0 0 20px rgba(0,245,255,0.3)',
+    particleColor: '#00f5ff'
+  }
+};
 
 export const applyTheme = (t: Theme) => {
   document.documentElement.style.setProperty('--theme-primary', t.primary);
   document.documentElement.style.setProperty('--theme-accent', t.accent);
-}
+  document.documentElement.style.setProperty('--theme-success', t.success);
+  document.documentElement.style.setProperty('--theme-warning', t.warning);
+};
