@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { motion, AnimatePresence, MotionConfig } from 'framer-motion'
 import { BookOpen, ClipboardList, Brain, Layers, BarChart3, Flame, FileDown, StickyNote, Palette, Play, Pause, RotateCcw, Clock } from 'lucide-react'
 import { PRESETS, applyTheme } from './theme'
 import { NS, INK, BORDER, safeGet, safeSet, formatTime, tsInsert, exportTextFile } from './utils'
@@ -101,6 +102,11 @@ export default function App(){
   const actKey = (d:number, mid:string, i:number)=> `${d}-${mid}-a${i}`
   const toggleActivity = (d:number, mid:string, i:number)=>{ const k=actKey(d,mid,i); setActivitiesDone(p=>({...p,[k]:!p[k]})) }
 
+  // expanded modules state for animations
+  const [expanded, setExpanded] = useState<Record<string,boolean>>(()=> safeGet(`${NS}:expanded`, {}))
+  useEffect(()=> safeSet(`${NS}:expanded`, expanded), [expanded])
+  const toggleExpanded = (key:string)=> setExpanded(p=>({...p,[key]:!p[key]}))
+
   // flashcards
   const [decks, setDecks] = useState(()=> safeGet(`${NS}:decks`, [
     { id:'deck1', title:'Email Foundations', cards:[
@@ -168,7 +174,8 @@ export default function App(){
   }
 
   return (
-    <div className={`theme-animate`}>
+    <MotionConfig reducedMotion="user">
+      <div className={`theme-animate`}>
       {/* Header */}
       <div className="header">
         <div className="container flex items-center justify-between" id="header-root">
@@ -241,6 +248,8 @@ export default function App(){
             activitiesDone={activitiesDone}
             toggleActivity={toggleActivity}
             dayPercent={dayPercent}
+            expanded={expanded}
+            toggleExpanded={toggleExpanded}
           />
         )}
 
@@ -283,6 +292,7 @@ export default function App(){
       <NotesDock open={notesOpen} label={notesLabel} html={draftHtml}
         setHtml={(s: string)=>{ dirtyRef.current=true; setDraftHtml(s) }}
         onClose={()=> setNotesOpen(false)} insertTemplate={insertTemplate} />
-    </div>
+      </div>
+    </MotionConfig>
   )
 }
