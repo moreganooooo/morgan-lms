@@ -43,3 +43,8 @@ logs/
 # Temporary files
 tmp/
 temp/
+
+# build
+/dist
+# TS
+/tsconfig.tsbuildinfo
