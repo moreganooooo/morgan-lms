@@ -1,0 +1,9 @@
+{
+  "typescript.preferences.includePackageJsonAutoImports": "off",
+  "css.lint.important": "ignore",
+  "css.lint.unknownAtRules": "ignore",
+  "html.validate.styles": false,
+  "emmet.excludeLanguages": [],
+  "problems.decorations.enabled": true,
+  "problems.showCurrentInStatus": true
+}
