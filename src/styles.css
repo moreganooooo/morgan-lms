@@ -345,8 +345,6 @@ body {
   color: #6b7280 !important;
 }
 
-
-
 /* Enhanced responsive design */
 @media (max-width: 768px) {
   .container {
@@ -506,5 +504,5 @@ select:focus-visible {
 }
 
 [style*="background: white"] * {
-  color: inherit !important;
+  color: #0f172a !important;
 }
