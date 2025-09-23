@@ -12,7 +12,7 @@ import BootcampView from './views/BootcampView'
 import PlannerView from './views/PlannerView'
 import FlashcardsView from './views/FlashcardsView'
 import AnalyticsView from './views/AnalyticsView'
-import SkillsView from './views/SkillsView'
+import EnhancedSkillsView from './enhanced-skills-view'
 import { INITIAL_SKILLS, MODULE_SKILL_MAPPING } from './skillsData';
 
 export type CelebrationType = 'module' | 'certification' | 'day' | 'theme' | 'achievement' | '';
@@ -40,6 +40,17 @@ export default function App(){
 
   const [achievements, setAchievements] = useState<string[]>(()=> safeGet(`${NS}:achs`, []))
   useEffect(()=> safeSet(`${NS}:achs`, achievements), [achievements])
+
+  const checkForAchievements = (newCertCount: number) => {
+    if (newCertCount === 1) {
+      triggerCelebration('certification')
+      setAchievements(prev => [...prev, 'first-certification'])
+    }
+    if (newCertCount === 3) {
+      triggerCelebration('achievement')
+      setAchievements(prev => [...prev, 'cert-collector'])
+    }
+  }
 
 // Enhanced Skills System
 const calculateSkillProgression = (baseSkills: any[], progress: Record<string, boolean>) => {
@@ -343,6 +354,22 @@ const bumpSkill = (id: string, delta = 0.3) => {
 
   const openNotes = (ctx: string, label: string) => { setNotesLabel(label); setNotesOpen(true) }
 
+  const [completedCertifications, setCompletedCertifications] = useState<string[]>(
+  () => safeGet(`${NS}:completedCerts`, [])
+  )
+  const [skillProgress, setSkillProgress] = useState(
+    () => safeGet(`${NS}:skillProgress`, {})
+  )
+  const celebrateCertification = () => {
+    triggerCelebration('certification')
+    setAchievements(prev => [...prev, 'first-certification'])
+  }
+
+  // Add effect to persist data:
+  useEffect(() => safeSet(`${NS}:completedCerts`, completedCertifications), [completedCertifications])
+  useEffect(() => safeSet(`${NS}:skillProgress`, skillProgress), [skillProgress])
+
+
   // Enhanced export function with better formatting
   const exportAllData=()=>{ 
     const lines=[
@@ -516,7 +543,7 @@ const bumpSkill = (id: string, delta = 0.3) => {
             {([['bootcamp','Bootcamp', <BookOpen key="i" className="w-4 h-4"/>, `${overallProgress}%`],
                ['planner','Planner', <ClipboardList key="i" className="w-4 h-4"/>, tasks.filter(t=>t.status==='doing').length],
                ['flashcards','Flashcards', <Brain key="i" className="w-4 h-4"/>, null],
-               ['skills','Skills', <Layers key="i" className="w-4 h-4"/>, null],
+               ['skills','Career Dev', <Layers key="i" className="w-4 h-4"/>, 'NEW!'],
                ['analytics','Analytics', <BarChart3 key="i" className="w-4 h-4"/>, null]] as any[])
                .map(([id,label,icon,badge])=> (
                 <button key={id}
@@ -578,7 +605,7 @@ const bumpSkill = (id: string, delta = 0.3) => {
             )}
 
             {activeTab==='skills' && (
-              <SkillsView skills={skills} theme={theme} />
+              <EnhancedSkillsView theme={theme} />
             )}
 
             {activeTab==='analytics' && (
