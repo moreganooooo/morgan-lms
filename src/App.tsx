@@ -8,6 +8,7 @@ import SparklineMini from './components/SparklineMini'
 import NotesDock from './components/NotesDock'
 import ThemeGallery from './components/ThemeGallery'
 import Celebration from './components/Celebration'
+import DoNowPanel from './components/DoNowPanel'
 import BootcampView from './views/BootcampView'
 import PlannerView from './views/PlannerView'
 import FlashcardsView from './views/FlashcardsView'
@@ -536,6 +537,28 @@ const bumpSkill = (id: string, delta = 0.3) => {
             </div>
           </div>
         </div>
+
+               <div className="flex items-center gap-3">
+               <div className="flex items-center gap-3">
+                 <button type="button" onClick={exportAllData} 
+                   className="p-3 rounded-lg border inline-flex items-center gap-2 btn-hover transition-all duration-300"
+                   /* ... existing styles ... */
+                 >
+                   {/* existing export button content */}
+                 </button>
+               </div>
+             </div>
+ 
+             {/* Next-Best-Action panel */}
+             <DoNowPanel
+               theme={theme}
+               decks={decks}
+               tasks={tasks}
+               activity={activity}
+               lastStudyDate={lastStudyDate}
+               studyStreak={studyStreak}
+               onNavigate={setActiveTab}
+             />
 
         {/* Tabs */}
         <div className="container" style={{ paddingTop: 24 }}>
