@@ -1,6 +1,7 @@
 // Enhanced BootcampView.tsx - Integrating your career-focused data
 import { CheckCircle2, Circle, Clock, Trophy, Target, Award, TrendingUp, DollarSign, Briefcase, ExternalLink } from 'lucide-react';
 import { Theme } from '../theme';
+import { INK } from '../utils';
 import React from 'react';
 import { CelebrationType } from '../App';
 
@@ -22,11 +23,11 @@ interface BootcampViewProps {
   dailyGoal: number;
 }
 
-export default function BootcampView({ 
-  currentDay, 
-  setCurrentDay, 
-  progress, 
-  setProgress, 
+export default function BootcampView({
+  currentDay,
+  setCurrentDay,
+  progress,
+  setProgress,
   openNotes,
   bumpSkill,
   achievements,
@@ -67,11 +68,11 @@ export default function BootcampView({
       
       // Check if day is complete
       const dayModules = data[dayNum].modules;
-      const completedInDay = dayModules.filter((m: any) => 
+      const completedInDay = dayModules.filter((m: any) =>
         m.id === moduleId ? true : progress[`${dayNum}-${m.id}`]
       ).length;
       
-      if (completedInDay === dayModules.length) {
+                      if (completedInDay === dayModules.length) {
         setTimeout(() => triggerCelebration('day'), 1000);
       }
     }
@@ -108,11 +109,12 @@ export default function BootcampView({
   return (
     <div className="space-y-6">
       {/* NEW: Career Impact Dashboard */}
-      <div 
+      <div
         className="grid grid-cols-1 md:grid-cols-3 gap-4 p-6 rounded-xl"
-        style={{ 
-          background: `${theme.success}10`, 
-          border: `1px solid ${theme.success}30` 
+        style={{
+          background: 'rgba(255,255,255,0.95)', 
+          border: `1px solid ${theme.success}30`,
+          boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
         }}
       >
         <div className="text-center">
@@ -120,7 +122,7 @@ export default function BootcampView({
           <div className="text-2xl font-bold" style={{ color: theme.success }}>
             +${getTotalSalaryImpact()}K
           </div>
-          <div className="text-sm text-white opacity-75">Potential Salary Impact</div>
+          <div className="text-sm" style={{ color: INK }}>Potential Salary Impact</div>
         </div>
         
         <div className="text-center">
@@ -128,7 +130,7 @@ export default function BootcampView({
           <div className="text-2xl font-bold" style={{ color: theme.primary }}>
             {BOOTCAMP_MARKET_DATA.jobMarketStats.emailMarketingGrowth}
           </div>
-          <div className="text-sm text-white opacity-75">Market Growth</div>
+          <div className="text-sm" style={{ color: INK }}>Market Growth</div>
         </div>
         
         <div className="text-center">
@@ -136,19 +138,20 @@ export default function BootcampView({
           <div className="text-2xl font-bold" style={{ color: theme.accent }}>
             {BOOTCAMP_MARKET_DATA.jobMarketStats.remoteOpportunities}
           </div>
-          <div className="text-sm text-white opacity-75">Remote Opportunities</div>
+          <div className="text-sm" style={{ color: INK }}>Remote Opportunities</div>
         </div>
       </div>
 
       {/* Enhanced Today's Progress Widget */}
-      <div 
+      <div
         className="p-6 rounded-xl transition-all duration-300 hover:scale-105" 
-        style={{ 
-          background: `${theme.success}15`, 
-          border: `1px solid ${theme.success}30` 
+        style={{
+          background: 'rgba(255,255,255,0.95)', 
+          border: `1px solid ${theme.success}30`,
+          boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
         }}
       >
-        <h3 className="font-semibold mb-4 flex items-center gap-2 text-white">
+        <h3 className="font-semibold mb-4 flex items-center gap-2" style={{ color: INK }}>
           <Target className="w-5 h-5" style={{ color: theme.success }} />
           Today's Progress
         </h3>
@@ -161,10 +164,10 @@ export default function BootcampView({
                 return progress[key] && savedToday === new Date().toDateString();
               }).length} / {dailyGoal}
             </div>
-            <div className="text-sm text-white opacity-75">
+            <div className="text-sm" style={{ color: INK }}>
               certifications completed today
             </div>
-            <div className="text-xs text-white opacity-60 mt-1">
+            <div className="text-xs" style={{ color: theme.gray }}>
               Building your career portfolio!
             </div>
           </div>
@@ -172,13 +175,13 @@ export default function BootcampView({
           {/* Circular Progress Indicator */}
           <div className="w-24 h-24 relative">
             <svg className="w-24 h-24 transform -rotate-90" viewBox="0 0 100 100">
-              <circle 
-                cx="50" 
-                cy="50" 
-                r="40" 
-                stroke="rgba(255,255,255,0.2)" 
-                strokeWidth="8" 
-                fill="none" 
+              <circle
+                cx="50"
+                cy="50"
+                r="40"
+                stroke="rgba(255,255,255,0.2)"
+                strokeWidth="8"
+                fill="none"
               />
               <circle
                 cx="50"
@@ -203,33 +206,33 @@ export default function BootcampView({
       </div>
       
       {/* Enhanced Day Header with Career Context */}
-      <div 
+      <div
         className="p-6 rounded-xl relative overflow-hidden transition-all duration-300 hover:scale-105"
-        style={{ 
+        style={{
           background: theme.accentGradient,
           boxShadow: theme.glowEffect 
         }}
       >
         <div className="relative z-10">
-          <h2 className="text-2xl font-bold text-white mb-2 flex items-center gap-2">
+          <h2 className="text-2xl font-bold mb-2 flex items-center gap-2" style={{ color: 'white' }}>
             <Award className="w-6 h-6" />
             Day {currentDay}: {data[currentDay].title}
           </h2>
-          <p className="text-white opacity-90 mb-2">
+          <p className="mb-2" style={{ color: 'rgba(255,255,255,0.9)' }}>
             {data[currentDay].subtitle}
           </p>
-          <div className="flex flex-wrap gap-4 text-sm text-white opacity-75 mb-4">
+          <div className="flex flex-wrap gap-4 text-sm mb-4" style={{ color: 'rgba(255,255,255,0.75)' }}>
             <span>⏱️ {data[currentDay].timeEstimate}</span>
             <span>💰 {data[currentDay].salaryImpact}</span>
             <span>🎯 {data[currentDay].careerStage}</span>
           </div>
           
           <div className="flex items-center justify-between">
-            <div className="text-white opacity-75">
+            <div style={{ color: 'rgba(255,255,255,0.75)' }}>
               Progress for this day
             </div>
             <div className="text-right">
-              <div className="text-4xl font-bold text-white">
+              <div className="text-4xl font-bold" style={{ color: 'white' }}>
                 {getDayProgress(currentDay)}%
               </div>
             </div>
@@ -250,16 +253,17 @@ export default function BootcampView({
           const isCompleted = progress[moduleKey];
           
           return (
-            <div 
+            <div
               key={module.id}
               className={`rounded-xl p-6 transition-all duration-300 ${
-                isCompleted 
-                  ? 'opacity-75 bg-white bg-opacity-10' 
-                  : 'hover:shadow-lg hover:scale-105 bg-white bg-opacity-20 backdrop-blur-sm'
+                isCompleted
+                  ? 'opacity-75'
+                  : 'hover:shadow-lg hover:scale-105'
               }`}
               style={{
-                border: `1px solid ${isCompleted ? theme.success : 'rgba(255,255,255,0.3)'}`,
-                boxShadow: isCompleted ? `0 0 20px ${theme.success}20` : 'none'
+                background: isCompleted ? `${theme.success}10` : 'rgba(255,255,255,0.95)',
+                border: `1px solid ${isCompleted ? theme.success : 'rgba(0,0,0,0.1)'}`,
+                boxShadow: isCompleted ? `0 0 20px ${theme.success}20` : '0 2px 10px rgba(0,0,0,0.1)'
               }}
             >
               <div className="flex items-start justify-between">
@@ -269,26 +273,27 @@ export default function BootcampView({
                     className="transition-all duration-300 hover:scale-110 mt-1"
                   >
                     {isCompleted ? (
-                      <CheckCircle2 
-                        className="w-7 h-7" 
-                        style={{color: theme.success}} 
+                      <CheckCircle2
+                        className="w-7 h-7"
+                        style={{color: theme.success}}
                       />
                     ) : (
-                      <Circle 
-                        className="w-7 h-7 text-white opacity-60 hover:opacity-100" 
+                      <Circle
+                        className="w-7 h-7"
+                        style={{ color: theme.gray }}
                       />
                     )}
                   </button>
                   
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
-                      <h3 className={`text-lg font-semibold text-white ${
+                      <h3 className={`text-lg font-semibold ${
                         isCompleted ? 'line-through opacity-75' : ''
-                      }`}>
+                      }`} style={{ color: INK }}>
                         {module.title}
                       </h3>
                       {module.directLink && (
-                        <a 
+                        <a
                           href={module.directLink}
                           target="_blank"
                           rel="noopener noreferrer"
@@ -301,19 +306,21 @@ export default function BootcampView({
                       )}
                     </div>
                     
-                    <p className="text-sm text-white opacity-75 mb-3">
+                    <p className="text-sm mb-3" style={{ color: theme.gray }}>
                       {module.description}
                     </p>
                     
                     <div className="flex flex-wrap gap-2 text-xs mb-3">
-                      <span className="px-2 py-1 rounded-full bg-white bg-opacity-20 text-white">
+                      <span className="px-2 py-1 rounded-full"
+                            style={{ backgroundColor: `${theme.primary}20`, color: theme.primary }}>
                         ⏱️ {module.time}
                       </span>
-                      <span className="px-2 py-1 rounded-full bg-white bg-opacity-20 text-white">
+                      <span className="px-2 py-1 rounded-full"
+                            style={{ backgroundColor: `${theme.gray}20`, color: theme.gray }}>
                         📊 {module.difficulty}
                       </span>
                       {module.salaryImpact && (
-                        <span 
+                        <span
                           className="px-2 py-1 rounded-full text-white font-medium"
                           style={{ backgroundColor: theme.success }}
                         >
@@ -321,7 +328,7 @@ export default function BootcampView({
                         </span>
                       )}
                       {module.type === 'certification' && (
-                        <span 
+                        <span
                           className="px-2 py-1 rounded-full text-white font-medium"
                           style={{ backgroundColor: theme.accent }}
                         >
@@ -331,7 +338,7 @@ export default function BootcampView({
                     </div>
 
                     {module.marketValue && (
-                      <p className="text-xs text-white opacity-60 italic">
+                      <p className="text-xs italic" style={{ color: theme.gray }}>
                         📈 {module.marketValue}
                       </p>
                     )}
@@ -340,9 +347,9 @@ export default function BootcampView({
                 
                 {isCompleted && (
                   <div className="flex items-center gap-2 ml-4">
-                    <div className="w-2 h-2 rounded-full animate-pulse" 
+                    <div className="w-2 h-2 rounded-full animate-pulse"
                          style={{ backgroundColor: theme.success }}></div>
-                    <span className="text-xs px-3 py-1 rounded-full text-white"
+                    <span className="text-xs px-3 py-1 rounded-full text-white font-medium"
                           style={{ backgroundColor: theme.success }}>
                       Complete
                     </span>
@@ -355,14 +362,15 @@ export default function BootcampView({
       </div>
 
       {/* NEW: Career Progression Tracker */}
-      <div 
+      <div
         className="p-6 rounded-xl"
-        style={{ 
-          background: `${theme.primary}10`, 
-          border: `1px solid ${theme.primary}30` 
+        style={{
+          background: 'rgba(255,255,255,0.95)',
+          border: `1px solid ${theme.primary}30`,
+          boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
         }}
       >
-        <h3 className="font-semibold mb-4 flex items-center gap-2 text-white">
+        <h3 className="font-semibold mb-4 flex items-center gap-2" style={{ color: INK }}>
           <TrendingUp className="w-5 h-5" style={{ color: theme.primary }} />
           Your Career Progression Path
         </h3>
@@ -376,17 +384,17 @@ export default function BootcampView({
                   isUnlocked ? 'hover:scale-105' : 'opacity-50'
                 }`}
                 style={{
-                  backgroundColor: isUnlocked ? `${theme.primary}20` : 'rgba(255,255,255,0.1)',
-                  borderColor: isUnlocked ? theme.primary : 'rgba(255,255,255,0.2)'
+                  backgroundColor: isUnlocked ? `${theme.primary}15` : `${theme.gray}10`,
+                  borderColor: isUnlocked ? theme.primary : theme.gray
                 }}
               >
-                <div className="text-sm font-medium text-white mb-1">
+                <div className="text-sm font-medium mb-1" style={{ color: isUnlocked ? theme.primary : INK }}>
                   {path.title}
                 </div>
-                <div className="text-xs text-white opacity-60 mb-2">
+                <div className="text-xs mb-2" style={{ color: theme.gray }}>
                   {path.timeframe}
                 </div>
-                <div className="text-xs text-white opacity-75">
+                <div className="text-xs" style={{ color: theme.gray }}>
                   {path.requirements.join(' • ')}
                 </div>
               </div>
@@ -405,10 +413,10 @@ export default function BootcampView({
               currentDay === day ? 'shadow-lg' : 'hover:shadow-md'
             }`}
             style={{
-              background: currentDay === day ? theme.accentGradient : 'rgba(255,255,255,0.15)',
-              color: 'white',
-              border: `1px solid ${currentDay === day ? 'transparent' : 'rgba(255,255,255,0.3)'}`,
-              boxShadow: currentDay === day ? theme.glowEffect : 'none'
+              background: currentDay === day ? theme.accentGradient : 'rgba(255,255,255,0.95)',
+              color: currentDay === day ? 'white' : INK,
+              border: `1px solid ${currentDay === day ? 'transparent' : 'rgba(0,0,0,0.1)'}`,
+              boxShadow: currentDay === day ? theme.glowEffect : '0 2px 10px rgba(0,0,0,0.1)'
             }}
           >
             <div className="text-center">

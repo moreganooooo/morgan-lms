@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts';
 import { TrendingUp, Award, Target, Star, Info, ChevronDown, ChevronUp } from 'lucide-react';
 import PersonalizedAnalysis from '../components/PersonalizedAnalysis';
+import { INK } from '../utils';
 
 interface Skill {
   id: string;
@@ -119,7 +120,7 @@ export default function SkillsView({ skills, theme }: SkillsViewProps) {
             <TrendingUp className="w-5 h-5" style={{ color: theme.primary }} />
             <span className="font-semibold text-gray-700">Average Score</span>
           </div>
-          <div className="text-2xl font-bold" style={{ color: theme.primary }}>
+          <div className="text-2xl font-bold" style={{ color: INK }}>
             {stats.averageScore.toFixed(1)}/5.0
           </div>
           {hoveredSkill === 'average' && (
@@ -139,7 +140,7 @@ export default function SkillsView({ skills, theme }: SkillsViewProps) {
             <Award className="w-5 h-5" style={{ color: theme.success }} />
             <span className="font-semibold text-gray-700">Expert Skills</span>
           </div>
-          <div className="text-2xl font-bold" style={{ color: theme.success }}>
+          <div className="text-2xl font-bold" style={{ color: INK }}>
             {stats.expertSkills}
           </div>
           {hoveredSkill === 'expert' && (
@@ -159,7 +160,7 @@ export default function SkillsView({ skills, theme }: SkillsViewProps) {
             <Target className="w-5 h-5" style={{ color: theme.accent }} />
             <span className="font-semibold text-gray-700">Advanced</span>
           </div>
-          <div className="text-2xl font-bold" style={{ color: theme.accent }}>
+          <div className="text-2xl font-bold" style={{ color: INK }}>
             {stats.advancedSkills}
           </div>
           {hoveredSkill === 'advanced' && (
@@ -179,7 +180,7 @@ export default function SkillsView({ skills, theme }: SkillsViewProps) {
             <Star className="w-5 h-5" style={{ color: theme.warning }} />
             <span className="font-semibold text-gray-700">Top Skill</span>
           </div>
-          <div className="text-sm font-bold" style={{ color: theme.warning }}>
+          <div className="text-sm font-bold" style={{ color: INK }}>
             {stats.topSkill?.label}
           </div>
           <div className="text-xs text-gray-500">
@@ -251,7 +252,7 @@ export default function SkillsView({ skills, theme }: SkillsViewProps) {
                       >
                         {level.label}
                       </span>
-                      <span className="text-sm font-bold" style={{ color: theme.primary }}>
+                      <span className="text-sm font-bold" style={{ color: INK }}>
                         {avgScore.toFixed(1)}/5.0
                       </span>
                     </div>
@@ -305,7 +306,7 @@ export default function SkillsView({ skills, theme }: SkillsViewProps) {
                         <h5 className="font-semibold text-gray-800">{skill.label}</h5>
                       </div>
                       <div className="text-right">
-                        <div className="text-lg font-bold" style={{ color: level.color }}>
+                        <div className="text-lg font-bold" style={{ color: INK }}>
                           {skill.score.toFixed(1)}/5.0
                         </div>
                         <span 

@@ -15,6 +15,7 @@ import {
   Globe,
   Filter
 } from 'lucide-react';
+import { INK } from './utils';
 
 // Import our new components and data
 import {
@@ -90,7 +91,7 @@ const EnhancedSkillsView: React.FC<EnhancedSkillsViewProps> = ({ theme }) => {
 
   return (
     <div className="space-y-6">
-      {/* Header Section */}
+      {/* Header Section - Keep gradient for good contrast */}
       <div 
         className="p-6 rounded-xl text-white relative overflow-hidden"
         style={{ background: theme.accentGradient }}
@@ -109,27 +110,55 @@ const EnhancedSkillsView: React.FC<EnhancedSkillsViewProps> = ({ theme }) => {
             </div>
           </div>
           
-          {/* Quick Stats */}
+          {/* Fixed Quick Stats with solid white backgrounds */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="text-center p-3 rounded-lg bg-white bg-opacity-20">
-              <Award className="w-6 h-6 mx-auto mb-1" />
-              <div className="font-bold">{completedCerts.length}</div>
-              <div className="text-xs opacity-75">Certifications</div>
+            <div 
+              className="text-center p-3 rounded-lg"
+              style={{
+                background: 'rgba(255,255,255,0.95)',
+                border: '1px solid rgba(255,255,255,0.3)',
+                boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+              }}
+            >
+              <Award className="w-6 h-6 mx-auto mb-1" style={{ color: theme.accent }} />
+              <div className="font-bold" style={{ color: INK }}>{completedCerts.length}</div>
+              <div className="text-xs" style={{ color: theme.gray }}>Certifications</div>
             </div>
-            <div className="text-center p-3 rounded-lg bg-white bg-opacity-20">
-              <Target className="w-6 h-6 mx-auto mb-1" />
-              <div className="font-bold">{Object.keys(SKILL_TREES).length}</div>
-              <div className="text-xs opacity-75">Skill Trees</div>
+            <div 
+              className="text-center p-3 rounded-lg"
+              style={{
+                background: 'rgba(255,255,255,0.95)',
+                border: '1px solid rgba(255,255,255,0.3)',
+                boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+              }}
+            >
+              <Target className="w-6 h-6 mx-auto mb-1" style={{ color: theme.primary }} />
+              <div className="font-bold" style={{ color: INK }}>{Object.keys(SKILL_TREES).length}</div>
+              <div className="text-xs" style={{ color: theme.gray }}>Skill Trees</div>
             </div>
-            <div className="text-center p-3 rounded-lg bg-white bg-opacity-20">
-              <TrendingUp className="w-6 h-6 mx-auto mb-1" />
-              <div className="font-bold">$85K+</div>
-              <div className="text-xs opacity-75">Target Salary</div>
+            <div 
+              className="text-center p-3 rounded-lg"
+              style={{
+                background: 'rgba(255,255,255,0.95)',
+                border: '1px solid rgba(255,255,255,0.3)',
+                boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+              }}
+            >
+              <TrendingUp className="w-6 h-6 mx-auto mb-1" style={{ color: theme.success }} />
+              <div className="font-bold" style={{ color: INK }}>$85K+</div>
+              <div className="text-xs" style={{ color: theme.gray }}>Target Salary</div>
             </div>
-            <div className="text-center p-3 rounded-lg bg-white bg-opacity-20">
-              <Calendar className="w-6 h-6 mx-auto mb-1" />
-              <div className="font-bold">6 Mo</div>
-              <div className="text-xs opacity-75">Target Timeline</div>
+            <div 
+              className="text-center p-3 rounded-lg"
+              style={{
+                background: 'rgba(255,255,255,0.95)',
+                border: '1px solid rgba(255,255,255,0.3)',
+                boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+              }}
+            >
+              <Calendar className="w-6 h-6 mx-auto mb-1" style={{ color: theme.warning }} />
+              <div className="font-bold" style={{ color: INK }}>6 Mo</div>
+              <div className="text-xs" style={{ color: theme.gray }}>Target Timeline</div>
             </div>
           </div>
         </div>
@@ -141,7 +170,7 @@ const EnhancedSkillsView: React.FC<EnhancedSkillsViewProps> = ({ theme }) => {
         </div>
       </div>
 
-      {/* Navigation Tabs */}
+      {/* Navigation Tabs - Fixed contrast */}
       <div className="flex gap-2 flex-wrap">
         {[
           { id: 'overview', label: 'Overview', icon: BarChart3 },
@@ -154,12 +183,12 @@ const EnhancedSkillsView: React.FC<EnhancedSkillsViewProps> = ({ theme }) => {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => setActiveTab(id as any)}
-            className={`px-6 py-3 rounded-lg font-medium flex items-center gap-2 transition-all duration-300 ${
-              activeTab === id ? 'text-white shadow-lg' : 'text-gray-600 hover:text-gray-800'
-            }`}
+            className={`px-6 py-3 rounded-lg font-medium flex items-center gap-2 transition-all duration-300`}
             style={{
-              background: activeTab === id ? theme.accentGradient : 'white',
-              border: `1px solid ${activeTab === id ? 'transparent' : '#e5e7eb'}`
+              background: activeTab === id ? theme.accentGradient : 'rgba(255,255,255,0.95)',
+              color: activeTab === id ? 'white' : INK,
+              border: `1px solid ${activeTab === id ? 'transparent' : 'rgba(0,0,0,0.1)'}`,
+              boxShadow: activeTab === id ? theme.glowEffect : '0 2px 10px rgba(0,0,0,0.1)'
             }}
           >
             <Icon className="w-4 h-4" />
@@ -186,9 +215,16 @@ const EnhancedSkillsView: React.FC<EnhancedSkillsViewProps> = ({ theme }) => {
                   onStartCertification={handleCertificationComplete}
                 />
                 
-                {/* Current Career Stage */}
-                <div className="p-6 bg-white rounded-xl shadow-lg">
-                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                {/* Fixed Current Career Stage */}
+                <div 
+                  className="p-6 rounded-xl shadow-lg"
+                  style={{
+                    background: 'rgba(255,255,255,0.95)',
+                    border: '1px solid rgba(0,0,0,0.1)',
+                    boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+                  }}
+                >
+                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2" style={{ color: INK }}>
                     <Briefcase className="w-5 h-5" style={{ color: theme.primary }} />
                     Current Career Stage
                   </h3>
@@ -205,21 +241,28 @@ const EnhancedSkillsView: React.FC<EnhancedSkillsViewProps> = ({ theme }) => {
                         }}
                       >
                         <div className="flex items-center justify-between mb-2">
-                          <h4 className="font-semibold text-gray-800">{stage.title}</h4>
+                          <h4 className="font-semibold" style={{ color: INK }}>{stage.title}</h4>
                           <span className="text-sm font-medium" style={{ color: theme.success }}>
                             {stage.salaryRange}
                           </span>
                         </div>
-                        <p className="text-sm text-gray-600 mb-2">{stage.description}</p>
-                        <div className="text-xs text-gray-500">
+                        <p className="text-sm mb-2" style={{ color: theme.gray }}>{stage.description}</p>
+                        <div className="text-xs" style={{ color: theme.gray }}>
                           Timeline: {stage.timeFrame} • {stage.marketOutlook}
                         </div>
                         {index === careerPath.currentStage && (
                           <div className="mt-3 pt-3 border-t border-blue-200">
-                            <div className="text-sm font-medium text-blue-700 mb-1">Required Skills:</div>
+                            <div className="text-sm font-medium mb-1" style={{ color: theme.primary }}>Required Skills:</div>
                             <div className="flex flex-wrap gap-1">
                               {stage.requiredSkills.map(skill => (
-                                <span key={skill} className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded">
+                                <span 
+                                  key={skill} 
+                                  className="text-xs px-2 py-1 rounded"
+                                  style={{ 
+                                    backgroundColor: `${theme.primary}20`,
+                                    color: theme.primary
+                                  }}
+                                >
                                   {skill}
                                 </span>
                               ))}
@@ -236,18 +279,32 @@ const EnhancedSkillsView: React.FC<EnhancedSkillsViewProps> = ({ theme }) => {
               <div className="space-y-6">
                 <MarketIntelligenceWidget theme={theme} />
                 
-                {/* Quick Skill Overview */}
-                <div className="p-6 bg-white rounded-xl shadow-lg">
-                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                {/* Fixed Quick Skill Overview */}
+                <div 
+                  className="p-6 rounded-xl shadow-lg"
+                  style={{
+                    background: 'rgba(255,255,255,0.95)',
+                    border: '1px solid rgba(0,0,0,0.1)',
+                    boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+                  }}
+                >
+                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2" style={{ color: INK }}>
                     <Target className="w-5 h-5" style={{ color: theme.accent }} />
                     Skill Overview
                   </h3>
                   
                   <div className="space-y-4">
                     {Object.entries(SKILL_TREES).map(([key, tree]) => (
-                      <div key={key} className="p-4 rounded-lg border border-gray-200 hover:shadow-md transition-all">
+                      <div 
+                        key={key} 
+                        className="p-4 rounded-lg border hover:shadow-md transition-all"
+                        style={{
+                          borderColor: 'rgba(0,0,0,0.1)',
+                          backgroundColor: 'rgba(255,255,255,0.8)'
+                        }}
+                      >
                         <div className="flex items-center justify-between mb-2">
-                          <h4 className="font-semibold text-gray-800">{tree.name}</h4>
+                          <h4 className="font-semibold" style={{ color: INK }}>{tree.name}</h4>
                           <span 
                             className="text-xs px-2 py-1 rounded-full"
                             style={{ 
@@ -268,7 +325,7 @@ const EnhancedSkillsView: React.FC<EnhancedSkillsViewProps> = ({ theme }) => {
                           />
                         </div>
                         <div className="flex justify-between items-center text-sm">
-                          <span className="text-gray-600">
+                          <span style={{ color: theme.gray }}>
                             {tree.currentLevel}/{tree.targetLevel}
                           </span>
                           <span style={{ color: theme.success }} className="font-medium">
@@ -285,15 +342,19 @@ const EnhancedSkillsView: React.FC<EnhancedSkillsViewProps> = ({ theme }) => {
 
           {activeTab === 'skills' && (
             <div className="space-y-6">
-              {/* Skill Tree Selector */}
+              {/* Fixed Skill Tree Selector */}
               <div className="flex gap-2 flex-wrap">
                 {Object.entries(SKILL_TREES).map(([key, tree]) => (
                   <button
                     key={key}
                     onClick={() => setSelectedSkillTree(key)}
-                    className={`px-4 py-2 rounded-lg border transition-all duration-300 ${
-                      selectedSkillTree === key ? 'border-blue-500 bg-blue-50 text-blue-700' : 'border-gray-300 hover:border-gray-400'
-                    }`}
+                    className={`px-4 py-2 rounded-lg border transition-all duration-300`}
+                    style={{
+                      borderColor: selectedSkillTree === key ? theme.primary : 'rgba(0,0,0,0.2)',
+                      backgroundColor: selectedSkillTree === key ? `${theme.primary}10` : 'rgba(255,255,255,0.95)',
+                      color: selectedSkillTree === key ? theme.primary : INK,
+                      boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+                    }}
                   >
                     {tree.name}
                   </button>
@@ -310,9 +371,9 @@ const EnhancedSkillsView: React.FC<EnhancedSkillsViewProps> = ({ theme }) => {
 
           {activeTab === 'certifications' && (
             <div className="space-y-6">
-              {/* Certification Filters */}
+              {/* Fixed Certification Filters */}
               <div className="flex items-center gap-4 flex-wrap">
-                <Filter className="w-5 h-5 text-gray-500" />
+                <Filter className="w-5 h-5" style={{ color: theme.gray }} />
                 {[
                   { id: 'all', label: 'All Certifications' },
                   { id: 'urgent', label: 'Urgent Priority', icon: Zap },
@@ -322,9 +383,13 @@ const EnhancedSkillsView: React.FC<EnhancedSkillsViewProps> = ({ theme }) => {
                   <button
                     key={id}
                     onClick={() => setCertificationFilter(id as any)}
-                    className={`px-4 py-2 rounded-lg border transition-all duration-300 flex items-center gap-2 ${
-                      certificationFilter === id ? 'border-blue-500 bg-blue-50 text-blue-700' : 'border-gray-300 hover:border-gray-400'
-                    }`}
+                    className={`px-4 py-2 rounded-lg border transition-all duration-300 flex items-center gap-2`}
+                    style={{
+                      borderColor: certificationFilter === id ? theme.primary : 'rgba(0,0,0,0.2)',
+                      backgroundColor: certificationFilter === id ? `${theme.primary}10` : 'rgba(255,255,255,0.95)',
+                      color: certificationFilter === id ? theme.primary : INK,
+                      boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+                    }}
                   >
                     {Icon && <Icon className="w-4 h-4" />}
                     {label}
@@ -348,12 +413,16 @@ const EnhancedSkillsView: React.FC<EnhancedSkillsViewProps> = ({ theme }) => {
               </div>
 
               {filteredCertifications.length === 0 && (
-                <div className="text-center py-12 text-gray-500">
-                  <Award className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                  <p>No certifications match your current filter.</p>
+                <div 
+                  className="text-center py-12 rounded-xl"
+                  style={{ backgroundColor: 'rgba(255,255,255,0.95)' }}
+                >
+                  <Award className="w-12 h-12 mx-auto mb-4 opacity-50" style={{ color: theme.gray }} />
+                  <p style={{ color: INK }}>No certifications match your current filter.</p>
                   <button
                     onClick={() => setCertificationFilter('all')}
-                    className="mt-2 text-blue-600 hover:text-blue-800"
+                    className="mt-2 hover:underline"
+                    style={{ color: theme.primary }}
                   >
                     View all certifications
                   </button>
@@ -364,19 +433,27 @@ const EnhancedSkillsView: React.FC<EnhancedSkillsViewProps> = ({ theme }) => {
 
           {activeTab === 'paths' && (
             <div className="space-y-6">
-              {/* Career Path Cards */}
+              {/* Fixed Career Path Cards */}
               {Object.entries(CAREER_PATHS).map(([key, path]) => (
-                <div key={key} className="p-6 bg-white rounded-xl shadow-lg">
+                <div 
+                  key={key} 
+                  className="p-6 rounded-xl shadow-lg"
+                  style={{
+                    background: 'rgba(255,255,255,0.95)',
+                    border: '1px solid rgba(0,0,0,0.1)',
+                    boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+                  }}
+                >
                   <div className="flex items-center justify-between mb-6">
                     <div>
-                      <h3 className="text-xl font-bold text-gray-800">{path.name}</h3>
-                      <div className="flex items-center gap-4 mt-2 text-sm text-gray-600">
+                      <h3 className="text-xl font-bold" style={{ color: INK }}>{path.name}</h3>
+                      <div className="flex items-center gap-4 mt-2 text-sm" style={{ color: theme.gray }}>
                         <span>💰 {path.totalEarningPotential}</span>
                         <span>📈 {path.marketGrowth}</span>
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-sm text-gray-500">Current Stage</div>
+                      <div className="text-sm" style={{ color: theme.gray }}>Current Stage</div>
                       <div className="text-2xl font-bold" style={{ color: theme.primary }}>
                         {path.currentStage + 1}/{path.stages.length}
                       </div>
@@ -410,26 +487,26 @@ const EnhancedSkillsView: React.FC<EnhancedSkillsViewProps> = ({ theme }) => {
                         {/* Stage Content */}
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between mb-2">
-                            <h4 className="font-semibold text-gray-800">{stage.title}</h4>
+                            <h4 className="font-semibold" style={{ color: INK }}>{stage.title}</h4>
                             <span className="text-sm font-medium" style={{ color: theme.success }}>
                               {stage.salaryRange}
                             </span>
                           </div>
-                          <p className="text-sm text-gray-600 mb-3">{stage.description}</p>
+                          <p className="text-sm mb-3" style={{ color: theme.gray }}>{stage.description}</p>
                           
                           <div className="grid md:grid-cols-2 gap-4 text-sm">
                             <div>
-                              <div className="font-medium text-gray-700 mb-1">Timeline:</div>
-                              <div className="text-gray-600">{stage.timeFrame}</div>
+                              <div className="font-medium mb-1" style={{ color: INK }}>Timeline:</div>
+                              <div style={{ color: theme.gray }}>{stage.timeFrame}</div>
                             </div>
                             <div>
-                              <div className="font-medium text-gray-700 mb-1">Market Outlook:</div>
-                              <div className="text-gray-600">{stage.marketOutlook}</div>
+                              <div className="font-medium mb-1" style={{ color: INK }}>Market Outlook:</div>
+                              <div style={{ color: theme.gray }}>{stage.marketOutlook}</div>
                             </div>
                           </div>
 
                           <div className="mt-3">
-                            <div className="font-medium text-gray-700 mb-2">Required Certifications:</div>
+                            <div className="font-medium mb-2" style={{ color: INK }}>Required Certifications:</div>
                             <div className="flex flex-wrap gap-2">
                               {stage.certifications.map(certId => {
                                 const cert = Object.values(CERTIFICATIONS).find(c => c.id === certId);
@@ -439,8 +516,11 @@ const EnhancedSkillsView: React.FC<EnhancedSkillsViewProps> = ({ theme }) => {
                                     className={`text-xs px-2 py-1 rounded ${
                                       completedCerts.includes(certId)
                                         ? 'bg-green-100 text-green-700'
-                                        : 'bg-gray-100 text-gray-700'
+                                        : 'bg-gray-100'
                                     }`}
+                                    style={{
+                                      color: completedCerts.includes(certId) ? '#15803d' : INK
+                                    }}
                                   >
                                     {completedCerts.includes(certId) ? '✅' : '📜'} {cert.name}
                                   </span>
